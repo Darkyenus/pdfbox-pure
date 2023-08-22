@@ -25,8 +25,6 @@ import org.apache.pdfbox.pdmodel.documentinterchange.markedcontent.PDPropertyLis
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.graphics.PDXObject;
 import org.apache.pdfbox.pdmodel.graphics.color.PDColorSpace;
-import org.apache.pdfbox.pdmodel.graphics.pattern.PDAbstractPattern;
-import org.apache.pdfbox.pdmodel.graphics.shading.PDShading;
 import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
 
 /**
@@ -47,12 +45,6 @@ public class DefaultResourceCache implements ResourceCache
             new HashMap<>();
 
     private final Map<COSObject, SoftReference<PDExtendedGraphicsState>> extGStates =
-            new HashMap<>();
-
-    private final Map<COSObject, SoftReference<PDShading>> shadings =
-            new HashMap<>();
-
-    private final Map<COSObject, SoftReference<PDAbstractPattern>> patterns =
             new HashMap<>();
 
     private final Map<COSObject, SoftReference<PDPropertyList>> properties =
@@ -109,40 +101,6 @@ public class DefaultResourceCache implements ResourceCache
         extGStates.put(indirect, new SoftReference<>(extGState));
     }
 
-    @Override
-    public PDShading getShading(COSObject indirect)
-    {
-        SoftReference<PDShading> shading = shadings.get(indirect);
-        if (shading != null)
-        {
-            return shading.get();
-        }
-        return null;
-    }
-
-    @Override
-    public void put(COSObject indirect, PDShading shading)
-    {
-        shadings.put(indirect, new SoftReference<>(shading));
-    }
-
-    @Override
-    public PDAbstractPattern getPattern(COSObject indirect)
-    {
-        SoftReference<PDAbstractPattern> pattern = patterns.get(indirect);
-        if (pattern != null)
-        {
-            return pattern.get();
-        }
-        return null;
-    }
-
-    @Override
-    public void put(COSObject indirect, PDAbstractPattern pattern)
-    {
-        patterns.put(indirect, new SoftReference<>(pattern));
-    }
-    
     @Override
     public PDPropertyList getProperties(COSObject indirect)
     {

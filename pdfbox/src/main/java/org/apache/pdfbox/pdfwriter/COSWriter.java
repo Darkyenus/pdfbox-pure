@@ -72,7 +72,6 @@ import org.apache.pdfbox.pdfwriter.compress.CompressParameters;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.ProtectionPolicy;
 import org.apache.pdfbox.pdmodel.encryption.SecurityHandler;
-import org.apache.pdfbox.pdmodel.fdf.FDFDocument;
 import org.apache.pdfbox.pdmodel.interactive.digitalsignature.COSFilterInputStream;
 import org.apache.pdfbox.pdmodel.interactive.digitalsignature.SignatureInterface;
 import org.apache.pdfbox.util.Hex;
@@ -214,7 +213,6 @@ public class COSWriter implements ICOSVisitor
 
     private COSObjectKey currentObjectKey = null;
     private PDDocument pdDocument = null;
-    private FDFDocument fdfDocument = null;
     private boolean willEncrypt = false;
 
     // signing
@@ -659,15 +657,7 @@ public class COSWriter implements ICOSVisitor
             doc.setVersion(
                     Math.max(doc.getVersion(), COSWriterCompressionPool.MINIMUM_SUPPORTED_VERSION));
         }
-        String headerString;
-        if (fdfDocument != null)
-        {
-            headerString = "%FDF-" + doc.getVersion();
-        }
-        else
-        {
-            headerString = "%PDF-" + doc.getVersion();
-        }
+        String headerString = "%PDF-" + doc.getVersion();
         getStandardOutput().write( headerString.getBytes(StandardCharsets.ISO_8859_1) );
         
         getStandardOutput().writeEOL();
@@ -1568,25 +1558,6 @@ public class COSWriter implements ICOSVisitor
         cosDoc.accept(this);
     }
 
-    /**
-     * This will write the fdf document.
-     *
-     * @param doc The document to write.
-     *
-     * @throws IOException If an error occurs while generating the data.
-     */
-    public void write(FDFDocument doc) throws IOException
-    {
-        fdfDocument = doc;
-        COSDocument cosDoc = fdfDocument.getDocument();
-        if (incrementalUpdate)
-        {
-            COSDictionary trailer = cosDoc.getTrailer();
-            trailer.toIncrement().exclude(trailer).forEach(objectsToWrite::add);
-        }
-        willEncrypt = false;
-        cosDoc.accept(this);
-    }
     /**
      * This will output the given byte getString as a PDF object.
      *

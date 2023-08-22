@@ -17,9 +17,7 @@
 
 package org.apache.pdfbox;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -28,12 +26,9 @@ import org.apache.pdfbox.io.RandomAccessReadBufferedFile;
 import org.apache.pdfbox.io.RandomAccessStreamCache.StreamCacheCreateFunction;
 import org.apache.pdfbox.io.RandomAccessReadBuffer;
 import org.apache.pdfbox.io.RandomAccessRead;
-import org.apache.pdfbox.pdfparser.FDFParser;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
-import org.apache.pdfbox.pdmodel.fdf.FDFDocument;
-import org.apache.pdfbox.util.XMLUtil;
 
 /**
  * Utility methods to load different types of documents
@@ -44,103 +39,6 @@ public class Loader
 
     private Loader()
     {
-    }
-
-    /**
-     * This will load a document from a file.
-     *
-     * @param filename The name of the file to load. {@link org.apache.pdfbox.io.RandomAccessReadBufferedFile} is used
-     * to read the file.
-     *
-     * @return The document that was loaded.
-     *
-     * @throws IOException If there is an error reading from the stream.
-     */
-    public static FDFDocument loadFDF(String filename) throws IOException
-    {
-        return Loader.loadFDF(new File(filename));
-    }
-
-    /**
-     * This will load a document from a file.
-     *
-     * @param file The name of the file to load. {@link org.apache.pdfbox.io.RandomAccessReadBufferedFile} is used to
-     * read the file.
-     *
-     * @return The document that was loaded.
-     *
-     * @throws IOException If there is an error reading from the stream.
-     */
-    public static FDFDocument loadFDF(File file) throws IOException
-    {
-        try (RandomAccessRead readBuffer = new RandomAccessReadBufferedFile(file))
-        {
-            FDFParser parser = new FDFParser(readBuffer);
-            return parser.parse();
-        }
-    }
-
-    /**
-     * This will load a document from an input stream. The stream is loaded to the memory to establish random access to
-     * the data.
-     *
-     * @param input The stream that contains the document. To read the stream
-     * {@link org.apache.pdfbox.io.RandomAccessReadBuffer} is used
-     *
-     * @return The document that was loaded.
-     *
-     * @throws IOException If there is an error reading from the stream.
-     */
-    public static FDFDocument loadFDF(InputStream input) throws IOException
-    {
-        try (RandomAccessRead readBuffer = new RandomAccessReadBuffer(input))
-        {
-            FDFParser parser = new FDFParser(readBuffer);
-            return parser.parse();
-        }
-    }
-
-    /**
-     * This will load a document from a file.
-     *
-     * @param filename The name of the file to load.
-     *
-     * @return The document that was loaded.
-     *
-     * @throws IOException If there is an error reading from the stream.
-     */
-    public static FDFDocument loadXFDF(String filename) throws IOException
-    {
-        return Loader.loadXFDF(new BufferedInputStream(new FileInputStream(filename)));
-    }
-
-    /**
-     * This will load a document from a file.
-     *
-     * @param file The name of the file to load.
-     *
-     * @return The document that was loaded.
-     *
-     * @throws IOException If there is an error reading from the stream.
-     */
-    public static FDFDocument loadXFDF(File file) throws IOException
-    {
-        return Loader.loadXFDF(new BufferedInputStream(new FileInputStream(file)));
-    }
-
-    /**
-     * This will load a document from an input stream. The stream is loaded to the memory to establish random access to
-     * the data.
-     *
-     * @param input The stream that contains the document.
-     *
-     * @return The document that was loaded.
-     *
-     * @throws IOException If there is an error reading from the stream.
-     */
-    public static FDFDocument loadXFDF(InputStream input) throws IOException
-    {
-        return new FDFDocument(XMLUtil.parse(input));
     }
     
     /**

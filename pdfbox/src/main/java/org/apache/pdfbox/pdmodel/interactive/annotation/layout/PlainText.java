@@ -90,7 +90,7 @@ public class PlainText
     /**
      * Attribute keys and attribute values used for text handling.
      * 
-     * This is similar to {@link java.awt.font.TextAttribute} but
+     * This is similar to {@link org.apache.awt.font.TextAttribute} but
      * handled individually as to avoid a dependency on awt.
      * 
      */

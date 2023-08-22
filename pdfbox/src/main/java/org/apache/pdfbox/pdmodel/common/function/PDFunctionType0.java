@@ -16,12 +16,7 @@
  */
 package org.apache.pdfbox.pdmodel.common.function;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.imageio.stream.ImageInputStream;
-import javax.imageio.stream.MemoryCacheImageInputStream;
-
+import org.apache.awt.imageio.stream.MemoryCacheImageInputStream;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.pdfbox.cos.COSArray;
@@ -29,6 +24,9 @@ import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSInteger;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.common.PDRange;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * This class represents a type 0 function in a PDF document.
@@ -396,7 +394,7 @@ public class PDFunctionType0 extends PDFunction
                     // PDF spec 1.7 p.171:
                     // Each sample value is represented as a sequence of BitsPerSample bits. 
                     // Successive values are adjacent in the bit stream; there is no padding at byte boundaries.
-                    try (ImageInputStream mciis = new MemoryCacheImageInputStream(is))
+                    try (MemoryCacheImageInputStream mciis = new MemoryCacheImageInputStream(is))
                     {
                         for (int i = 0; i < arraySize; i++)
                         {

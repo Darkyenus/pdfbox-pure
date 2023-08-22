@@ -74,21 +74,5 @@ public final class PDComboBox extends PDChoice
     {
         getCOSObject().setFlag(COSName.FF, FLAG_EDIT, edit);
     }
-    
-    @Override
-    void constructAppearances() throws IOException
-    {
-        AppearanceGeneratorHelper apHelper;
-        apHelper = new AppearanceGeneratorHelper(this);
-        List<String> values = getValue();
-        
-        if (!values.isEmpty())
-        {
-            apHelper.setAppearanceValue(values.get(0));
-        }
-        else
-        {
-            apHelper.setAppearanceValue("");
-        }
-    }
+
 }

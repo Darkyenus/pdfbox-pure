@@ -16,10 +16,6 @@
  */
 package org.apache.pdfbox.pdmodel.interactive.annotation;
 
-import java.io.IOException;
-import java.util.Calendar;
-import java.util.Objects;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.pdfbox.cos.COSArray;
@@ -28,16 +24,15 @@ import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSInteger;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.cos.COSNumber;
-import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.COSObjectable;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.documentinterchange.markedcontent.PDPropertyList;
 import org.apache.pdfbox.pdmodel.graphics.color.PDColor;
-import org.apache.pdfbox.pdmodel.graphics.color.PDColorSpace;
-import org.apache.pdfbox.pdmodel.graphics.color.PDDeviceCMYK;
-import org.apache.pdfbox.pdmodel.graphics.color.PDDeviceGray;
-import org.apache.pdfbox.pdmodel.graphics.color.PDDeviceRGB;
+
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.Objects;
 
 /**
  * A PDF annotation.
@@ -814,47 +809,6 @@ public abstract class PDAnnotation implements COSObjectable
     }
 
     /**
-     * This will retrieve the color used in drawing various elements. As of PDF 1.6 these are :
-     * <ul>
-     * <li>Background of icon when closed</li>
-     * <li>Title bar of popup window</li>
-     * <li>Border of a link annotation</li>
-     * </ul>
-     *
-     * @return Color object representing the colour
-     * 
-     */
-    public PDColor getColor()
-    {
-        return getColor(COSName.C);
-    }
-
-    protected PDColor getColor(COSName itemName)
-    {
-        COSArray cs = this.getCOSObject().getCOSArray(itemName);
-        if (cs != null)
-        {
-            PDColorSpace colorSpace = null;
-            switch (cs.size())
-            {
-            case 1:
-                colorSpace = PDDeviceGray.INSTANCE;
-                break;
-            case 3:
-                colorSpace = PDDeviceRGB.INSTANCE;
-                break;
-            case 4:
-                colorSpace = PDDeviceCMYK.INSTANCE;
-                break;
-            default:
-                break;
-            }
-            return new PDColor(cs, colorSpace);
-        }
-        return null;
-    }
-
-    /**
      * This will set the corresponding page for this annotation. This is optional but recommended.
      * Not doing it <a href="https://stackoverflow.com/questions/74836898/">can cause trouble when
      * PDFs get signed</a>.
@@ -877,26 +831,6 @@ public abstract class PDAnnotation implements COSObjectable
     {
         COSDictionary page = getCOSObject().getCOSDictionary(COSName.P);
         return page != null ? new PDPage(page) : null;
-    }
-
-    /**
-     * Create the appearance entry for this annotation. Not having it may prevent display in some viewers. This method
-     * is for overriding in subclasses, the default implementation does nothing.
-     * 
-     * @param document the related document
-     */
-    public void constructAppearances(PDDocument document)
-    {
-    }
-
-    /**
-     * Create the appearance entry for this annotation. Not having it may prevent display in some
-     * viewers. This method is for overriding in subclasses, the default implementation does
-     * nothing.
-     * 
-     */
-    public void constructAppearances()
-    {
     }
 
 }

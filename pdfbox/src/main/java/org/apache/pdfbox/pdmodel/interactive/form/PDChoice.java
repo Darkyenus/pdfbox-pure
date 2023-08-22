@@ -17,7 +17,6 @@
 package org.apache.pdfbox.pdmodel.interactive.form;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -123,60 +122,6 @@ public abstract class PDChoice extends PDVariableText
     }
 
     /**
-     * This will set the display and export values - the 'Opt' key.
-     *
-     * <p>
-     * This will set both, the export value and the display value
-     * of the choice field. If either one of the parameters is null or an 
-     * empty list is supplied the options will
-     * be removed.
-     * </p>
-     * <p>
-     * An {@link IllegalArgumentException} will be thrown if the
-     * number of items in the list differ.
-     * </p>
-     *
-     * @see #setOptions(List)
-     * @param exportValues List containing all possible export values.
-     * @param displayValues List containing all possible display values.
-     */
-    public void setOptions(List<String> exportValues, List<String> displayValues)
-    {
-        if (exportValues != null && displayValues != null && !exportValues.isEmpty() && !displayValues.isEmpty()) 
-        {
-            if (exportValues.size() != displayValues.size())
-            {
-                throw new IllegalArgumentException(
-                        "The number of entries for exportValue and displayValue shall be the same.");
-            }
-            else
-            {
-                List<KeyValue> keyValuePairs = FieldUtils.toKeyValueList(exportValues, displayValues);
-
-                if (isSort())
-                {
-                    FieldUtils.sortByValue(keyValuePairs);
-                } 
-
-                COSArray options = new COSArray();
-                for (int i = 0; i<exportValues.size(); i++)
-                {
-                    COSArray entry = new COSArray();
-                    KeyValue pair = keyValuePairs.get(i);
-                    entry.add(new COSString(pair.getKey()));
-                    entry.add(new COSString(pair.getValue()));
-                    options.add(entry);
-                }
-                getCOSObject().setItem(COSName.OPT, options);
-            }
-        }
-        else
-        {
-            getCOSObject().removeItem(COSName.OPT);
-        }      
-    }
-
-    /**
      * This will get the display values from the options.
      * 
      * <p>
@@ -226,36 +171,6 @@ public abstract class PDChoice extends PDVariableText
     {
         COSArray value = getCOSObject().getCOSArray(COSName.I);
         return value != null ? value.toCOSNumberIntegerList() : Collections.emptyList();
-    }
-
-    /**
-     * This will set the indices of the selected options - the 'I' key.
-     * <p>
-     * This method is preferred over {@link #setValue(List)} for choice fields which
-     * <ul>
-     *  <li>do support multiple selections</li>
-     *  <li>have export values with the same value</li>
-     * </ul>
-     * <p>
-     * Setting the index will set the value too.
-     *
-     * @param values List containing the indices of all selected options.
-     */
-    public void setSelectedOptionsIndex(List<Integer> values)
-    {
-        if (values != null && !values.isEmpty())
-        {
-            if (!isMultiSelect())
-            {
-                throw new IllegalArgumentException(
-                        "Setting the indices is not allowed for choice fields not allowing multiple selections.");
-            }
-            getCOSObject().setItem(COSName.I, COSArray.ofCOSIntegers(values));
-        }
-        else
-        {
-            getCOSObject().removeItem(COSName.I);
-        }
     }
 
     /**
@@ -366,64 +281,6 @@ public abstract class PDChoice extends PDVariableText
     }
 
     /**
-     * Set the selected value of this field, and try to update the visual appearance.
-     *
-     * @param value The name of the selected item.
-     * @throws IOException if the value could not be set
-     */
-    @Override
-    public void setValue(String value) throws IOException
-    {
-        getCOSObject().setString(COSName.V, value);
-        
-        // remove I key for single valued choice field
-        setSelectedOptionsIndex(null);
-        
-        applyChange();
-    }
-
-    /**
-     * Sets the default value of this field.
-     *
-     * @param value The name of the selected item.
-     */
-    public void setDefaultValue(String value)
-    {
-        getCOSObject().setString(COSName.DV, value);
-    }
-    
-    /**
-     * Sets the entry "V" to the given values. Requires {@link #isMultiSelect()} to be true.
-     * 
-     * @param values the list of values
-     * @throws IOException if the appearance couldn't be generated.
-     */    
-    public void setValue(List<String> values) throws IOException
-    {
-        if (values != null && !values.isEmpty())
-        {
-            if (!isMultiSelect())
-            {
-                throw new IllegalArgumentException("The list box does not allow multiple selections.");
-            }
-            List<String> options = getOptions();
-            if (!options.containsAll(values))
-            {
-                throw new IllegalArgumentException("The values are not contained in the selectable options.");
-            }
-            getCOSObject().setItem(COSName.V,
-                    COSArray.ofCOSStrings(values));
-            updateSelectedOptionsIndex(values, options);
-        }
-        else
-        {
-            getCOSObject().removeItem(COSName.V);
-            getCOSObject().removeItem(COSName.I);
-        }
-        applyChange();
-    }
-
-    /**
      * Returns the selected values, or an empty List. This list always contains a single item
      * unless {@link #isMultiSelect()} is true.
      *
@@ -432,17 +289,6 @@ public abstract class PDChoice extends PDVariableText
     public List<String> getValue()
     {
         return getValueFor(COSName.V);
-    }
-
-    /**
-     * Returns the default values, or an empty List. This list always contains a single item
-     * unless {@link #isMultiSelect()} is true.
-     *
-     * @return A non-null string.
-     */
-    public List<String> getDefaultValue()
-    {
-        return getValueFor(COSName.DV);
     }
 
     /**
@@ -467,24 +313,5 @@ public abstract class PDChoice extends PDVariableText
     {
         return Arrays.toString(getValue().toArray());
     }
-    
-    /**
-     * Update the 'I' key based on values set.
-     */
-    private void updateSelectedOptionsIndex(List<String> values, List<String> options)
-    {
-        List<Integer> indices = new ArrayList<>(values.size());
 
-        for (String value : values)
-        {
-            indices.add(options.indexOf(value));
-        }
-        
-        // Indices have to be "... array of integers, sorted in ascending order ..."
-        Collections.sort(indices);
-        setSelectedOptionsIndex(indices);
-    }
-
-    @Override
-    abstract void constructAppearances() throws IOException;
 }

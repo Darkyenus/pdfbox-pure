@@ -16,24 +16,6 @@
  */
 package org.apache.pdfbox.pdmodel;
 
-import java.awt.Point;
-import java.awt.image.DataBuffer;
-import java.awt.image.Raster;
-import java.awt.image.WritableRaster;
-import java.io.BufferedOutputStream;
-import java.io.Closeable;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.fontbox.ttf.TrueTypeFont;
@@ -60,7 +42,6 @@ import org.apache.pdfbox.pdmodel.encryption.ProtectionPolicy;
 import org.apache.pdfbox.pdmodel.encryption.SecurityHandler;
 import org.apache.pdfbox.pdmodel.encryption.SecurityHandlerFactory;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.graphics.color.PDDeviceRGB;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotation;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAppearanceDictionary;
@@ -73,6 +54,20 @@ import org.apache.pdfbox.pdmodel.interactive.digitalsignature.SigningSupport;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDSignatureField;
+
+import java.io.BufferedOutputStream;
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * This is the in-memory representation of the PDF document.
@@ -93,22 +88,6 @@ public class PDDocument implements Closeable
     private static final int[] RESERVE_BYTE_RANGE = new int[] { 0, 1000000000, 1000000000, 1000000000 };
 
     private static final Log LOG = LogFactory.getLog(PDDocument.class);
-
-    /**
-     * avoid concurrency issues with PDDeviceRGB
-     */
-    static
-    {
-        try
-        {
-            WritableRaster raster = Raster.createBandedRaster(DataBuffer.TYPE_BYTE, 1, 1, 3, new Point(0, 0));
-            PDDeviceRGB.INSTANCE.toRGBImage(raster);
-        }
-        catch (IOException ex)
-        {
-            LOG.debug("voodoo error", ex);
-        }
-    }
     
     private final COSDocument document;
 
@@ -703,7 +682,7 @@ public class PDDocument implements Closeable
 
     /**
      * Determine the highest object number from the imported page to avoid mixed up numbers when saving the new pdf.
-     * 
+     *
      * @param importedPage the imported page.
      */
     private void setHighestImportedObjectNumber(PDPage importedPage)

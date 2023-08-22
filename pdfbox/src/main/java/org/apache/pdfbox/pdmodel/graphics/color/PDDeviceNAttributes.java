@@ -109,29 +109,6 @@ public final class PDDeviceNAttributes
         return new PDDeviceNProcess(process);
     }
 
-    /**
-     * Returns true if this is an NChannel (PDF 1.6) color space.
-     * @return true if this is an NChannel color space.
-     */
-    public boolean isNChannel()
-    {
-        return "NChannel".equals(dictionary.getNameAsString(COSName.SUBTYPE));
-    }
-
-    /**
-     * Sets the colorant map.
-     * @param colorants the map of colorants
-     */
-    public void setColorants(Map<String, PDColorSpace> colorants)
-    {
-        COSDictionary colorantDict = null;
-        if(colorants != null)
-        {
-            colorantDict = COSDictionaryMap.convert(colorants);
-        }
-        dictionary.setItem(COSName.COLORANTS, colorantDict);
-    }
-
     @Override
     public String toString()
     {

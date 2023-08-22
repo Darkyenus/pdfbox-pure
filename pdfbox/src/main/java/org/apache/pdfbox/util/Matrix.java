@@ -16,12 +16,12 @@
  */
 package org.apache.pdfbox.util;
 
+import org.apache.awt.geom.AffineTransform;
+import org.apache.awt.geom.Point2D;
 import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSFloat;
 import org.apache.pdfbox.cos.COSNumber;
 
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
 import java.util.Arrays;
 import org.apache.pdfbox.cos.COSBase;
 
@@ -122,12 +122,12 @@ public final class Matrix implements Cloneable
     public Matrix(AffineTransform at)
     {
         single = new float[SIZE];
-        single[0] = (float)at.getScaleX();
-        single[1] = (float)at.getShearY();
-        single[3] = (float)at.getShearX();
-        single[4] = (float)at.getScaleY();
-        single[6] = (float)at.getTranslateX();
-        single[7] = (float)at.getTranslateY();
+        single[0] = at.getScaleX();
+        single[1] = at.getShearY();
+        single[3] = at.getShearX();
+        single[4] = at.getScaleY();
+        single[6] = at.getTranslateX();
+        single[7] = at.getTranslateY();
         single[8] = 1;
     }
 
@@ -323,8 +323,8 @@ public final class Matrix implements Cloneable
      */
     public void transform(Point2D point)
     {
-        float x = (float)point.getX();
-        float y = (float)point.getY();
+        float x = point.getX();
+        float y = point.getY();
         float a = single[0];
         float b = single[1];
         float c = single[3];
@@ -342,7 +342,7 @@ public final class Matrix implements Cloneable
      *
      * @return the transformed point.
      */
-    public Point2D.Float transformPoint(float x, float y)
+    public Point2D transformPoint(float x, float y)
     {
         float a = single[0];
         float b = single[1];
@@ -350,7 +350,7 @@ public final class Matrix implements Cloneable
         float d = single[4];
         float e = single[6];
         float f = single[7];
-        return new Point2D.Float(x * a + y * c + e, x * b + y * d + f);
+        return new Point2D(x * a + y * c + e, x * b + y * d + f);
     }
 
     /**

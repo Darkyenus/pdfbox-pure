@@ -22,8 +22,6 @@ import org.apache.pdfbox.pdmodel.documentinterchange.markedcontent.PDPropertyLis
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.graphics.PDXObject;
 import org.apache.pdfbox.pdmodel.graphics.color.PDColorSpace;
-import org.apache.pdfbox.pdmodel.graphics.pattern.PDAbstractPattern;
-import org.apache.pdfbox.pdmodel.graphics.shading.PDShading;
 import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
 
 /**
@@ -56,23 +54,7 @@ public interface ResourceCache
      * @return the cached instance of the referenced extended graphics state, if available
      */
     PDExtendedGraphicsState getExtGState(COSObject indirect);
-        
-    /**
-     * Returns the shading resource for the given indirect object, if it is in the cache.
-     * 
-     * @param indirect the indirect reference of the shading to be returned
-     * @return the cached instance of the referenced shading, if available
-     */
-    PDShading getShading(COSObject indirect);
-    
-    /**
-     * Returns the pattern resource for the given indirect object, if it is in the cache.
-     *
-     * @param indirect the indirect reference of the pattern to be returned
-     * @return the cached instance of the referenced pattern, if available
-     */
-    PDAbstractPattern getPattern(COSObject indirect);
-        
+
     /**
      * Returns the property list resource for the given indirect object, if it is in the cache.
      * 
@@ -112,22 +94,6 @@ public interface ResourceCache
      * @param extGState the extended graphics state to be cached
      */
     void put(COSObject indirect, PDExtendedGraphicsState extGState);
-
-    /**
-     * Puts the given indirect shading resource in the cache.
-     * 
-     * @param indirect the indirect reference of the shading to be cached
-     * @param shading the shading to be cached
-     */
-    void put(COSObject indirect, PDShading shading);
-
-    /**
-     * Puts the given indirect pattern resource in the cache.
-     * 
-     * @param indirect the indirect reference of the pattern to be cached
-     * @param pattern the pattern to be cached
-     */
-    void put(COSObject indirect, PDAbstractPattern pattern);
 
     /**
      * Puts the given indirect property list resource in the cache.

@@ -16,9 +16,10 @@
  */
 package org.apache.pdfbox.pdmodel.common;
 
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Point2D;
 import java.util.Arrays;
+
+import org.apache.awt.geom.GeneralPath;
+import org.apache.awt.geom.Point2D;
 import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSFloat;
@@ -310,10 +311,10 @@ public class PDRectangle implements COSObjectable
         float x2 = getUpperRightX();
         float y2 = getUpperRightY();
 
-        Point2D.Float p0 = matrix.transformPoint(x1, y1);
-        Point2D.Float p1 = matrix.transformPoint(x2, y1);
-        Point2D.Float p2 = matrix.transformPoint(x2, y2);
-        Point2D.Float p3 = matrix.transformPoint(x1, y2);
+        Point2D p0 = matrix.transformPoint(x1, y1);
+        Point2D p1 = matrix.transformPoint(x2, y1);
+        Point2D p2 = matrix.transformPoint(x2, y2);
+        Point2D p3 = matrix.transformPoint(x1, y2);
 
         GeneralPath path = new GeneralPath();
         path.moveTo(p0.getX(), p0.getY());

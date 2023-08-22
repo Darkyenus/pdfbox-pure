@@ -19,7 +19,6 @@ package org.apache.pdfbox.pdmodel.font;
 
 import static org.apache.pdfbox.pdmodel.font.UniUtil.getUniNameOfCodePoint;
 
-import java.awt.geom.GeneralPath;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,6 +30,7 @@ import java.util.Set;
 import org.apache.fontbox.FontBoxFont;
 import org.apache.fontbox.afm.AFMParser;
 import org.apache.fontbox.afm.FontMetrics;
+import org.apache.awt.geom.GeneralPath;
 import org.apache.pdfbox.pdmodel.font.encoding.GlyphList;
 import org.apache.pdfbox.pdmodel.font.encoding.SymbolEncoding;
 

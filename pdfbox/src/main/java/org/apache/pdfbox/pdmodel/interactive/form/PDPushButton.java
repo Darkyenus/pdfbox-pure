@@ -16,7 +16,6 @@
  */
 package org.apache.pdfbox.pdmodel.interactive.form;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -77,12 +76,6 @@ public class PDPushButton extends PDButton
     }
 
     @Override
-    public String getDefaultValue()
-    {
-        return "";
-    }
-
-    @Override
     public String getValueAsString()
     {
         return getValue();
@@ -94,9 +87,4 @@ public class PDPushButton extends PDButton
         return Collections.emptySet();
     }
 
-    @Override
-    void constructAppearances() throws IOException
-    {
-        // TODO: add appearance handler to generate/update appearance
-    } 
 }

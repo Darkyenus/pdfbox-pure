@@ -51,9 +51,6 @@ public abstract class PDAnnotationSquareCircle extends PDAnnotationMarkup
         super(dict);
     }
 
-    @Override
-    public abstract void constructAppearances();
-
     /**
      * This will set interior color of the drawn area color is in DeviceRGB colorspace.
      *
@@ -63,16 +60,6 @@ public abstract class PDAnnotationSquareCircle extends PDAnnotationMarkup
     public void setInteriorColor(PDColor ic)
     {
         getCOSObject().setItem(COSName.IC, ic.toCOSArray());
-    }
-
-    /**
-     * This will retrieve the interior color of the drawn area color is in DeviceRGB color space.
-     *
-     * @return object representing the color.
-     */
-    public PDColor getInteriorColor()
-    {
-        return getColor(COSName.IC);
     }
 
     /**

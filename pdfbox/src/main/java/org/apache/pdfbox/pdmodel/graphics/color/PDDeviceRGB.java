@@ -16,10 +16,6 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.color;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
-import java.io.IOException;
-
 import org.apache.pdfbox.cos.COSName;
 
 /**
@@ -56,42 +52,9 @@ public final class PDDeviceRGB extends PDDeviceColorSpace
     }
 
     @Override
-    public float[] getDefaultDecode(int bitsPerComponent)
-    {
-        return new float[] { 0, 1, 0, 1, 0, 1 };
-    }
-
-    @Override
     public PDColor getInitialColor()
     {
         return initialColor;
     }
 
-    @Override
-    public float[] toRGB(float[] value)
-    {
-        return value;
-    }
-
-    @Override
-    public BufferedImage toRGBImage(WritableRaster raster) throws IOException
-    {
-        //
-        // WARNING: this method is performance sensitive, modify with care!
-        //
-        // Please read PDFBOX-3854 and PDFBOX-2092 and look at the related commits first.
-        // The current code returns TYPE_INT_RGB images which prevents slowness due to threads
-        // blocking each other when TYPE_CUSTOM images are used.
-        BufferedImage image = new BufferedImage(raster.getWidth(), raster.getHeight(), BufferedImage.TYPE_INT_RGB);
-        image.setData(raster);
-        return image;
-    }
-
-    @Override
-    public BufferedImage toRawImage(WritableRaster raster) throws IOException
-    {
-        // Device RGB is not specified, as its the colors of whatever device you use. The user
-        // should use the toRGBImage().
-        return null;
-    }
 }

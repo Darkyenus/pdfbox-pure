@@ -16,8 +16,8 @@
  */
 package org.apache.pdfbox.pdmodel.interactive.digitalsignature.visible;
 
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
+import org.apache.awt.geom.AffineTransform;
+import org.apache.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;

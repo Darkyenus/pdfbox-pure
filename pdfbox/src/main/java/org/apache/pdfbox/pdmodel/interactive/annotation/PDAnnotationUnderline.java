@@ -16,10 +16,7 @@
 
 package org.apache.pdfbox.pdmodel.interactive.annotation;
 
-import org.apache.pdfbox.pdmodel.interactive.annotation.handlers.PDUnderlineAppearanceHandler;
 import org.apache.pdfbox.cos.COSDictionary;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.interactive.annotation.handlers.PDAppearanceHandler;
 
 /**
  *
@@ -31,8 +28,6 @@ public class PDAnnotationUnderline extends PDAnnotationTextMarkup
      * The type of annotation.
      */
     public static final String SUB_TYPE = "Underline";
-
-    private PDAppearanceHandler customAppearanceHandler;
 
      /**
      * Constructor.
@@ -52,33 +47,4 @@ public class PDAnnotationUnderline extends PDAnnotationTextMarkup
         super(dict);
     }
 
-    /**
-     * Set a custom appearance handler for generating the annotations appearance streams.
-     * 
-     * @param appearanceHandler custom appearance handler
-     */
-    public void setCustomAppearanceHandler(PDAppearanceHandler appearanceHandler)
-    {
-        customAppearanceHandler = appearanceHandler;
-    }
-
-    @Override
-    public void constructAppearances()
-    {
-        this.constructAppearances(null);
-    }
-
-    @Override
-    public void constructAppearances(PDDocument document)
-    {
-        if (customAppearanceHandler == null)
-        {
-            PDUnderlineAppearanceHandler appearanceHandler = new PDUnderlineAppearanceHandler(this, document);
-            appearanceHandler.generateAppearanceStreams();
-        }
-        else
-        {
-            customAppearanceHandler.generateAppearanceStreams();
-        }
-    }
 }

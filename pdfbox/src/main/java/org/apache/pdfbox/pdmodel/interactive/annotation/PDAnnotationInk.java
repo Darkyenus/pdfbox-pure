@@ -20,9 +20,6 @@ import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.interactive.annotation.handlers.PDAppearanceHandler;
-import org.apache.pdfbox.pdmodel.interactive.annotation.handlers.PDInkAppearanceHandler;
 
 /**
  *
@@ -34,8 +31,6 @@ public class PDAnnotationInk extends PDAnnotationMarkup
      * The type of annotation.
      */
     public static final String SUB_TYPE = "Ink";
-
-    private PDAppearanceHandler customAppearanceHandler;
 
     /**
      * Constructor.
@@ -106,35 +101,5 @@ public class PDAnnotationInk extends PDAnnotationMarkup
             return inkList;
         }
         return new float[0][0];
-    }
-
-    /**
-     * Set a custom appearance handler for generating the annotations appearance streams.
-     * 
-     * @param appearanceHandler custom appearance handler
-     */
-    public void setCustomAppearanceHandler(PDAppearanceHandler appearanceHandler)
-    {
-        customAppearanceHandler = appearanceHandler;
-    }
-
-    @Override
-    public void constructAppearances()
-    {
-        this.constructAppearances(null);
-    }
-
-    @Override
-    public void constructAppearances(PDDocument document)
-    {
-        if (customAppearanceHandler == null)
-        {
-            PDInkAppearanceHandler appearanceHandler = new PDInkAppearanceHandler(this, document);
-            appearanceHandler.generateAppearanceStreams();
-        }
-        else
-        {
-            customAppearanceHandler.generateAppearanceStreams();
-        }
     }
 }

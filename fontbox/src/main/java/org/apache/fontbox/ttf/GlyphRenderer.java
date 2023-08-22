@@ -18,8 +18,8 @@ package org.apache.fontbox.ttf;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.awt.geom.GeneralPath;
 
-import java.awt.geom.GeneralPath;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;

@@ -21,12 +21,9 @@ import java.io.IOException;
 import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
-import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.interactive.action.PDActionFactory;
 import org.apache.pdfbox.pdmodel.interactive.action.PDAction;
 import org.apache.pdfbox.pdmodel.interactive.action.PDActionURI;
-import org.apache.pdfbox.pdmodel.interactive.annotation.handlers.PDAppearanceHandler;
-import org.apache.pdfbox.pdmodel.interactive.annotation.handlers.PDLinkAppearanceHandler;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDDestination;
 
 /**
@@ -59,11 +56,6 @@ public class PDAnnotationLink extends PDAnnotation
      * The type of annotation.
      */
     public static final String SUB_TYPE = "Link";
-    
-    /**
-     * Custom appearance handler to generate an appearance stream.
-     */
-    private PDAppearanceHandler customAppearanceHandler;
 
     /**
      * Constructor.
@@ -215,34 +207,5 @@ public class PDAnnotationLink extends PDAnnotation
         COSArray array = getCOSObject().getCOSArray(COSName.QUADPOINTS);
         return array != null ? array.toFloatArray() : null;
     }
-    
-    /**
-     * Set a custom appearance handler for generating the annotations appearance streams.
-     * 
-     * @param appearanceHandler custom appearance handler
-     */
-    public void setCustomAppearanceHandler(PDAppearanceHandler appearanceHandler)
-    {
-        customAppearanceHandler = appearanceHandler;
-    }
-    
-    @Override
-    public void constructAppearances()
-    {
-        this.constructAppearances(null);
-    }
 
-    @Override
-    public void constructAppearances(PDDocument document)
-    {
-        if (customAppearanceHandler == null)
-        {
-            PDLinkAppearanceHandler appearanceHandler = new PDLinkAppearanceHandler(this, document);
-            appearanceHandler.generateAppearanceStreams();
-        }
-        else
-        {
-            customAppearanceHandler.generateAppearanceStreams();
-        }
-    }
 }

@@ -16,15 +16,12 @@
  */
 package org.apache.pdfbox.pdmodel.interactive.form;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSDictionary;
-import org.apache.pdfbox.cos.COSInteger;
 import org.apache.pdfbox.cos.COSName;
-import org.apache.pdfbox.pdmodel.fdf.FDFField;
 import org.apache.pdfbox.pdmodel.interactive.action.PDFormFieldAdditionalActions;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
 
@@ -67,23 +64,7 @@ public abstract class PDTerminalField extends PDField
     {
         getCOSObject().setItem(COSName.AA, actions);
     }
-    
-    @Override
-    public int getFieldFlags()
-    {
-        int retval = 0;
-        COSInteger ff = (COSInteger) getCOSObject().getDictionaryObject(COSName.FF);
-        if (ff != null)
-        {
-            retval = ff.intValue();
-        }
-        else if (getParent() != null)
-        {
-            retval = getParent().getFieldFlags();
-        }
-        return retval;
-    }
-    
+
     @Override
     public String getFieldType()
     {
@@ -93,62 +74,6 @@ public abstract class PDTerminalField extends PDField
             fieldType = getParent().getFieldType();
         }
         return fieldType;
-    }
-
-    @Override
-    public void importFDF(FDFField fdfField) throws IOException
-    {
-        super.importFDF(fdfField);
-        
-        Integer f = fdfField.getWidgetFieldFlags();
-        for (PDAnnotationWidget widget : getWidgets())
-        {
-            if (f != null)
-            {
-                widget.setAnnotationFlags(f);
-            }
-            else
-            {
-                // these are supposed to be ignored if the F is set.
-                Integer setF = fdfField.getSetWidgetFieldFlags();
-                int annotFlags = widget.getAnnotationFlags();
-                if (setF != null)
-                {
-                    annotFlags = annotFlags | setF;
-                    widget.setAnnotationFlags(annotFlags);
-                }
-
-                Integer clrF = fdfField.getClearWidgetFieldFlags();
-                if (clrF != null)
-                {
-                    // we have to clear the bits of the document fields for every bit that is
-                    // set in this field.
-                    //
-                    // Example:
-                    // docF = 1011
-                    // clrF = 1101
-                    // clrFValue = 0010;
-                    // newValue = 1011 & 0010 which is 0010
-                    int clrFValue = clrF;
-                    clrFValue ^= 0xFFFFFFFFL;
-                    annotFlags = annotFlags & clrFValue;
-                    widget.setAnnotationFlags(annotFlags);
-                }
-            }
-        }
-    }
-
-    @Override
-    FDFField exportFDF() throws IOException
-    {
-        FDFField fdfField = new FDFField();
-        fdfField.setPartialFieldName(getPartialName());
-        fdfField.setValue(getCOSObject().getDictionaryObject(COSName.V));
-
-        // fixme: the old code which was here assumed that Kids were PDField instances,
-        //        which is never true. They're annotation widgets.
-        
-        return fdfField;
     }
 
     /**
@@ -198,23 +123,5 @@ public abstract class PDTerminalField extends PDField
             widget.getCOSObject().setItem(COSName.PARENT, this);
         }
     }
-    
-    /**
-     * Applies a value change to the field. Generates appearances if required and raises events.
-     * 
-     * @throws IOException if the appearance couldn't be generated
-     */
-    protected final void applyChange() throws IOException
-    {
-        constructAppearances();
-        // if we supported JavaScript we would raise a field changed event here
-    }
-    
-    /**
-     * Constructs appearance streams and appearance dictionaries for all widget annotations.
-     * Subclasses should not call this method directly but via {@link #applyChange()}.
-     * 
-     * @throws IOException if the appearance couldn't be generated
-     */
-    abstract void constructAppearances() throws IOException;
+
 }

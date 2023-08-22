@@ -18,9 +18,6 @@ package org.apache.pdfbox.pdmodel.interactive.annotation;
 
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.interactive.annotation.handlers.PDAppearanceHandler;
-import org.apache.pdfbox.pdmodel.interactive.annotation.handlers.PDTextAppearanceHandler;
 
 /**
  * This is the class that represents a text annotation.
@@ -29,8 +26,6 @@ import org.apache.pdfbox.pdmodel.interactive.annotation.handlers.PDTextAppearanc
  */
 public class PDAnnotationText extends PDAnnotationMarkup
 {
-    private PDAppearanceHandler customAppearanceHandler;
-
     /*
      * The various values of the Text as defined in the PDF 1.7 reference Table 172
      */
@@ -220,33 +215,4 @@ public class PDAnnotationText extends PDAnnotationMarkup
         this.getCOSObject().setString(COSName.STATE_MODEL, stateModel);
     }
 
-    /**
-     * Set a custom appearance handler for generating the annotations appearance streams.
-     * 
-     * @param appearanceHandler custom appearance handler
-     */
-    public void setCustomAppearanceHandler(PDAppearanceHandler appearanceHandler)
-    {
-        customAppearanceHandler = appearanceHandler;
-    }
-
-    @Override
-    public void constructAppearances()
-    {
-        this.constructAppearances(null);
-    }
-
-    @Override
-    public void constructAppearances(PDDocument document)
-    {
-        if (customAppearanceHandler == null)
-        {
-            PDTextAppearanceHandler appearanceHandler = new PDTextAppearanceHandler(this, document);
-            appearanceHandler.generateAppearanceStreams();
-        }
-        else
-        {
-            customAppearanceHandler.generateAppearanceStreams();
-        }
-    }
 }

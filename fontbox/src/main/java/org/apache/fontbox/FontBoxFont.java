@@ -17,10 +17,10 @@
 
 package org.apache.fontbox;
 
-import java.awt.geom.GeneralPath;
 import java.io.IOException;
 import java.util.List;
 import org.apache.fontbox.util.BoundingBox;
+import org.apache.awt.geom.GeneralPath;
 
 /**
  * Common interface for all FontBox fonts.

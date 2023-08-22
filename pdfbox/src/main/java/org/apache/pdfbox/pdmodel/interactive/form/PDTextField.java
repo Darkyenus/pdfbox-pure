@@ -206,19 +206,6 @@ public final class PDTextField extends PDVariableText
     }
 
     /**
-     * Set the plain text value of this field, and try to update the visual appearance.
-     * 
-     * @param value Plain text
-     * @throws IOException if the value could not be set
-     */
-    @Override
-    public void setValue(String value) throws IOException
-    {
-        getCOSObject().setString(COSName.V, value);
-        applyChange();
-    }
-
-    /**
      * Sets the default value of this field.
      *
      * @param value Plain text
@@ -253,12 +240,5 @@ public final class PDTextField extends PDVariableText
     {
         return getValue();
     }
-    
-    @Override
-    void constructAppearances() throws IOException
-    {
-        AppearanceGeneratorHelper apHelper;
-        apHelper = new AppearanceGeneratorHelper(this);
-        apHelper.setAppearanceValue(getValue());
-    }
+
 }

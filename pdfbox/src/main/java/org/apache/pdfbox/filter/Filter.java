@@ -16,18 +16,6 @@
  */
 package org.apache.pdfbox.filter;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.zip.Deflater;
-
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.pdfbox.cos.COSArray;
@@ -40,6 +28,14 @@ import org.apache.pdfbox.io.RandomAccessOutputStream;
 import org.apache.pdfbox.io.RandomAccessRead;
 import org.apache.pdfbox.io.RandomAccessReadBuffer;
 import org.apache.pdfbox.io.RandomAccessReadWriteBuffer;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.zip.Deflater;
 
 /**
  * A filter for stream data.
@@ -145,30 +141,6 @@ public abstract class Filter
                       obj.getClass().getName());
         }
         return new COSDictionary();
-    }
-
-    /**
-     * Finds a suitable image raster reader for an image format.
-     *
-     * @param formatName The image format to search for.
-     * @param errorCause The probably cause if something goes wrong.
-     * @return The image reader for the format.
-     * @throws MissingImageReaderException if no image reader is found.
-     */
-    public static final ImageReader findImageReader(String formatName, String errorCause)
-            throws MissingImageReaderException
-    {
-        Iterator<ImageReader> readers = ImageIO.getImageReadersByFormatName(formatName);
-        while (readers.hasNext())
-        {
-            ImageReader reader = readers.next();
-            if (reader.canReadRaster())
-            {
-                return reader;
-            }
-            reader.dispose();
-        }
-        throw new MissingImageReaderException("Cannot read " + formatName + " image: " + errorCause);
     }
 
     /**

@@ -16,7 +16,7 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.form;
 
-import java.awt.geom.AffineTransform;
+import org.apache.awt.geom.AffineTransform;
 import java.io.IOException;
 import java.io.InputStream;
 import org.apache.pdfbox.contentstream.PDContentStream;
@@ -234,11 +234,11 @@ public class PDFormXObject extends PDXObject implements PDContentStream
     public void setMatrix(AffineTransform transform)
     {
         COSArray matrix = new COSArray();
-        double[] values = new double[6];
+        float[] values = new float[6];
         transform.getMatrix(values);
-        for (double v : values)
+        for (float v : values)
         {
-            matrix.add(new COSFloat((float) v));
+            matrix.add(new COSFloat(v));
         }
         getCOSObject().setItem(COSName.MATRIX, matrix);
     }

@@ -17,29 +17,20 @@
 
 package org.apache.pdfbox.printing;
 
-import java.awt.RenderingHints;
-import java.awt.print.Book;
-import java.awt.print.PageFormat;
-import java.awt.print.Paper;
-import java.awt.print.Printable;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
 
 /**
  * Prints a PDF document using its original paper size.
  *
  * @author John Hewson
  */
-public final class PDFPageable extends Book
-{
+public final class PDFPageable {
     private final PDDocument document;
     private final int numberOfPages;
     private final boolean showPageBorder;
     private final float dpi;
     private final Orientation orientation;
     private boolean subsamplingAllowed = false;
-    private RenderingHints renderingHints = null;
 
     /**
      * Creates a new PDFPageable.
@@ -95,27 +86,6 @@ public final class PDFPageable extends Book
     }
 
     /**
-     * Get the rendering hints.
-     *
-     * @return the rendering hints or null if none are set.
-     */
-    public RenderingHints getRenderingHints()
-    {
-        return renderingHints;
-    }
-
-    /**
-     * Set the rendering hints. Use this to influence rendering quality and speed. If you don't set them yourself or
-     * pass null, PDFBox will decide <b><u>at runtime</u></b> depending on the destination.
-     *
-     * @param renderingHints rendering hints to be used to influence rendering quality and speed
-     */
-    public void setRenderingHints(RenderingHints renderingHints)
-    {
-        this.renderingHints = renderingHints;
-    }
-
-    /**
      * Value indicating if the renderer is allowed to subsample images before drawing, according to
      * image dimensions and requested scale.
      *
@@ -143,82 +113,9 @@ public final class PDFPageable extends Book
         this.subsamplingAllowed = subsamplingAllowed;
     }
 
-    @Override
     public int getNumberOfPages()
     {
         return numberOfPages;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * Returns the actual physical size of the pages in the PDF file. May not fit the local printer.
-     */
-    @Override
-    public PageFormat getPageFormat(int pageIndex)
-    {
-        PDPage page = document.getPage(pageIndex);
-        PDRectangle mediaBox = PDFPrintable.getRotatedMediaBox(page);
-        PDRectangle cropBox = PDFPrintable.getRotatedCropBox(page);
-        
-        // Java does not seem to understand landscape paper sizes, i.e. where width > height, it
-        // always crops the imageable area as if the page were in portrait. I suspect that this is
-        // a JDK bug but it might be by design, see PDFBOX-2922.
-        //
-        // As a workaround, we normalise all Page(s) to be portrait, then flag them as landscape in
-        // the PageFormat.
-        Paper paper;
-        boolean isLandscape;
-        if (mediaBox.getWidth() > mediaBox.getHeight())
-        {
-            // rotate
-            paper = new Paper();
-            paper.setSize(mediaBox.getHeight(), mediaBox.getWidth());
-            paper.setImageableArea(cropBox.getLowerLeftY(), cropBox.getLowerLeftX(),
-                    cropBox.getHeight(), cropBox.getWidth());
-            isLandscape = true;
-        }
-        else
-        {
-            paper = new Paper();
-            paper.setSize(mediaBox.getWidth(), mediaBox.getHeight());
-            paper.setImageableArea(cropBox.getLowerLeftX(), cropBox.getLowerLeftY(),
-                    cropBox.getWidth(), cropBox.getHeight());
-            isLandscape = false;
-        }
-
-        PageFormat format = new PageFormat();
-        format.setPaper(paper);
-        
-        // auto portrait/landscape
-        switch (orientation)
-        {
-            case AUTO:
-                format.setOrientation(isLandscape ? PageFormat.LANDSCAPE : PageFormat.PORTRAIT);
-                break;
-            case LANDSCAPE:
-                format.setOrientation(PageFormat.LANDSCAPE);
-                break;
-            case PORTRAIT:
-                format.setOrientation(PageFormat.PORTRAIT);
-                break;
-            default:
-                break;
-        }
-        
-        return format;
-    }
-    
-    @Override
-    public Printable getPrintable(int i)
-    {
-        if (i >= numberOfPages)
-        {
-            throw new IndexOutOfBoundsException(i + " >= " + numberOfPages);
-        }
-        PDFPrintable printable = new PDFPrintable(document, Scaling.ACTUAL_SIZE, showPageBorder, dpi);
-        printable.setSubsamplingAllowed(subsamplingAllowed);
-        printable.setRenderingHints(renderingHints);
-        return printable;
-    }
 }

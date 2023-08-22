@@ -26,7 +26,6 @@ import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSStream;
 import org.apache.pdfbox.io.IOUtils;
 import org.apache.pdfbox.pdmodel.common.COSObjectable;
-import org.w3c.dom.Document;
 
 /**
  * An XML Forms Architecture (XFA) resource.
@@ -114,21 +113,5 @@ public final class PDXFAResource implements COSObjectable
         {
             return IOUtils.toByteArray(is);
         }
-    }
-    
-    /**
-     * Get the XFA content as W3C document.
-     * 
-     * @see #getBytes()
-     * 
-     * @return the XFA content
-     * 
-     * @throws IOException if something went wrong when reading the XFA content.
-     * 
-     */        
-    public Document getDocument() throws IOException
-    {
-        return org.apache.pdfbox.util.XMLUtil //
-                .parse(new ByteArrayInputStream(this.getBytes()), true);
     }
 }

@@ -17,7 +17,8 @@
 
 package org.apache.fontbox.ttf;
 
-import java.awt.geom.GeneralPath;
+import org.apache.awt.geom.GeneralPath;
+
 import java.io.IOException;
 
 /**

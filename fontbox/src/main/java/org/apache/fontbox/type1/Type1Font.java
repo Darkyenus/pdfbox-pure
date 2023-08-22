@@ -17,7 +17,6 @@
 
 package org.apache.fontbox.type1;
 
-import java.awt.geom.GeneralPath;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -33,6 +32,7 @@ import org.apache.fontbox.cff.Type1CharStringParser;
 import org.apache.fontbox.encoding.Encoding;
 import org.apache.fontbox.pfb.PfbParser;
 import org.apache.fontbox.util.BoundingBox;
+import org.apache.awt.geom.GeneralPath;
 
 /**
  * Represents an Adobe Type 1 (.pfb) font. Thread safe.

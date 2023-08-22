@@ -16,10 +16,10 @@
  */
 package org.apache.fontbox.ttf;
 
-import java.awt.geom.GeneralPath;
 import java.io.IOException;
 
 import org.apache.fontbox.util.BoundingBox;
+import org.apache.awt.geom.GeneralPath;
 
 /**
  * A glyph data record in the glyf table.

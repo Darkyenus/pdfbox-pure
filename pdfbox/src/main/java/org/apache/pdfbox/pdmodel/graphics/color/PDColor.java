@@ -16,15 +16,14 @@
  */
 package org.apache.pdfbox.pdmodel.graphics.color;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.pdfbox.cos.COSArray;
+import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.cos.COSNumber;
 
-import java.io.IOException;
 import java.util.Arrays;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.pdfbox.cos.COSBase;
 
 /**
  * A color value, consisting of one or more color components, or for pattern color spaces,
@@ -164,24 +163,6 @@ public final class PDColor
     public boolean isPattern()
     {
         return patternName != null;
-    }
-
-    /**
-     * Returns the packed RGB value for this color, if any.
-     * @return RGB
-     * @throws IOException if the color conversion fails
-     * @throws UnsupportedOperationException if this color value is a pattern.
-     */
-    public int toRGB() throws IOException
-    {
-        float[] floats = colorSpace.toRGB(components);
-        int r = Math.round(floats[0] * 255);
-        int g = Math.round(floats[1] * 255);
-        int b = Math.round(floats[2] * 255);
-        int rgb = r;
-        rgb = (rgb << 8) + g;
-        rgb = (rgb << 8) + b;
-        return rgb;
     }
 
     /**

@@ -16,7 +16,6 @@
  */
 package org.apache.fontbox.ttf;
 
-import java.awt.geom.GeneralPath;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,6 +32,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.fontbox.FontBoxFont;
 import org.apache.fontbox.ttf.model.GsubData;
 import org.apache.fontbox.util.BoundingBox;
+import org.apache.awt.geom.GeneralPath;
 
 /**
  * A TrueType font file.

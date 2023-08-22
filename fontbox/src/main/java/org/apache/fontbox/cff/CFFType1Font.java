@@ -16,7 +16,6 @@
  */
 package org.apache.fontbox.cff;
 
-import java.awt.geom.GeneralPath;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -24,6 +23,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.apache.fontbox.EncodedFont;
 import org.apache.fontbox.type1.Type1CharStringReader;
+import org.apache.awt.geom.GeneralPath;
 
 /**
  * A Type 1-equivalent font program represented in a CFF file. Thread safe.

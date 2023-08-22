@@ -17,7 +17,6 @@
 
 package org.apache.fontbox.cff;
 
-import java.awt.geom.GeneralPath;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -25,6 +24,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.apache.fontbox.type1.Type1CharStringReader;
+import org.apache.awt.geom.GeneralPath;
 
 /**
  * A Type 0 CIDFont represented in a CFF file. Thread safe.

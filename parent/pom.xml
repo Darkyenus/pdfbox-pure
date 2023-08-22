@@ -218,6 +218,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <!--<version>3.11.0</version>-->
                 <configuration>
                     <showDeprecation>true</showDeprecation>
                     <target>11</target>

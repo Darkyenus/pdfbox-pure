@@ -18,10 +18,7 @@ package org.apache.pdfbox.pdmodel.interactive.annotation;
 import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
-import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.graphics.color.PDColor;
-import org.apache.pdfbox.pdmodel.interactive.annotation.handlers.PDAppearanceHandler;
-import org.apache.pdfbox.pdmodel.interactive.annotation.handlers.PDPolylineAppearanceHandler;
 
 /**
  *
@@ -34,8 +31,6 @@ public class PDAnnotationPolyline extends PDAnnotationMarkup
      */
     public static final String SUB_TYPE = "PolyLine";
 
-    private PDAppearanceHandler customAppearanceHandler;
-    
     /**
      * Constructor.
      */
@@ -139,16 +134,6 @@ public class PDAnnotationPolyline extends PDAnnotationMarkup
     }
 
     /**
-     * This will retrieve the interior color with which to fill the annotation’s line endings.
-     *
-     * @return object representing the color.
-     */
-    public PDColor getInteriorColor()
-    {
-        return getColor(COSName.IC);
-    }
-
-    /**
      * This will retrieve the numbers that shall represent the alternating horizontal and vertical
      * coordinates.
      *
@@ -172,35 +157,5 @@ public class PDAnnotationPolyline extends PDAnnotationMarkup
         COSArray ar = new COSArray();
         ar.setFloatArray(points);
         getCOSObject().setItem(COSName.VERTICES, ar);
-    }
-
-    /**
-     * Set a custom appearance handler for generating the annotations appearance streams.
-     * 
-     * @param appearanceHandler custom appearance handler
-     */
-    public void setCustomAppearanceHandler(PDAppearanceHandler appearanceHandler)
-    {
-        customAppearanceHandler = appearanceHandler;
-    }
-
-    @Override
-    public void constructAppearances()
-    {
-        this.constructAppearances(null);
-    }
-
-    @Override
-    public void constructAppearances(PDDocument document)
-    {
-        if (customAppearanceHandler == null)
-        {
-            PDPolylineAppearanceHandler appearanceHandler = new PDPolylineAppearanceHandler(this, document);
-            appearanceHandler.generateAppearanceStreams();
-        }
-        else
-        {
-            customAppearanceHandler.generateAppearanceStreams();
-        }
     }
 }

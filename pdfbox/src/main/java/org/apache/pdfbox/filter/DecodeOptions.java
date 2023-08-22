@@ -16,7 +16,7 @@
  */
 package org.apache.pdfbox.filter;
 
-import java.awt.Rectangle;
+import org.apache.awt.Rectangle;
 
 /**
  * Options that may be passed to a Filter to request special handling when decoding the stream.

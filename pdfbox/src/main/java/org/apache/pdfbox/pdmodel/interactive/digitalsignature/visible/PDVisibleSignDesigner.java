@@ -16,22 +16,16 @@
  */
 package org.apache.pdfbox.pdmodel.interactive.digitalsignature.visible;
 
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
-
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.imageio.ImageIO;
-
-import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.awt.geom.AffineTransform;
+import org.apache.awt.image.BufferedImage;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.io.RandomAccessRead;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Class for visible signature design properties. Setters use param() instead of setParam() to allow
@@ -53,56 +47,6 @@ public class PDVisibleSignDesigner
     private AffineTransform affineTransform = new AffineTransform();
     private float imageSizeInPercents;
     private int rotation = 0;
-
-    /**
-     * Constructor.
-     *
-     * @param filename Path of the PDF file
-     * @param imageStream image as a stream
-     * @param page The 1-based page number for which the page size should be calculated.
-     * @throws IOException if the new instance of PDVisibleSignDesigner could not be created
-     */
-    public PDVisibleSignDesigner(String filename, InputStream imageStream, int page)
-            throws IOException
-    {
-        // set visible signature image Input stream
-        readImageStream(imageStream);
-
-        // calculate height and width of document page
-        calculatePageSizeFromFile(filename, page);
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param documentSource Original PDF document as RandomAccessRead
-     * @param imageStream Image as a stream
-     * @param page The 1-based page number for which the page size should be calculated.
-     * @throws IOException if the new instance of PDVisibleSignDesigner could not be created
-     */
-    public PDVisibleSignDesigner(RandomAccessRead documentSource, InputStream imageStream, int page)
-            throws IOException
-    {
-        // set visible signature image Input stream
-        readImageStream(imageStream);
-
-        // calculate height and width of document page
-        calculatePageSizeFromRandomAccessRead(documentSource, page);
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param document Already created PDDocument of your PDF document.
-     * @param imageStream Image as a stream.
-     * @param page The 1-based page number for which the page size should be calculated.
-     * @throws IOException If we can't read, flush, or can't close stream.
-     */
-    public PDVisibleSignDesigner(PDDocument document, InputStream imageStream, int page) throws IOException
-    {
-        readImageStream(imageStream);
-        calculatePageSize(document, page);
-    }
 
     /**
      * Constructor.
@@ -151,18 +95,6 @@ public class PDVisibleSignDesigner
     {
         setImage(image);
         calculatePageSize(document, page);
-    }
-
-    /**
-     * Constructor usable for signing existing signature fields.
-     *
-     * @param imageStream image as a stream
-     * @throws IOException if the new instance of PDVisibleSignDesigner could not be created
-     */
-    public PDVisibleSignDesigner(InputStream imageStream) throws IOException
-    {
-        // set visible signature image Input stream
-        readImageStream(imageStream);
     }
 
     private void calculatePageSizeFromFile(String filename, int page) throws IOException
@@ -256,22 +188,6 @@ public class PDVisibleSignDesigner
             case 0:
             default:
                 break;
-        }
-        return this;
-    }
-
-    /**
-     * Set the image for the signature.
-     *
-     * @param path Path of the image file.
-     * @return Visible Signature Configuration Object
-     * @throws IOException if the image for the signature could not be set
-     */
-    public PDVisibleSignDesigner signatureImage(String path) throws IOException
-    {
-        try (InputStream in = new BufferedInputStream(new FileInputStream(path)))
-        {
-            readImageStream(in);
         }
         return this;
     }
@@ -433,18 +349,6 @@ public class PDVisibleSignDesigner
     public BufferedImage getImage()
     {
         return image;
-    }
-
-    /**
-     * Read the image stream of the signature and set height and width.
-     *
-     * @param stream stream of your visible signature image
-     * @throws IOException If we can't read, flush, or close stream of image
-     */
-    private void readImageStream(InputStream stream) throws IOException
-    {
-        ImageIO.setUseCache(false);
-        setImage(ImageIO.read(stream));
     }
 
     /**

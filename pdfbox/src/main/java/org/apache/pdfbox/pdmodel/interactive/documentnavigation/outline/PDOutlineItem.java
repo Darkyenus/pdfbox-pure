@@ -16,7 +16,7 @@
  */
 package org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline;
 
-import java.awt.Color;
+import org.apache.awt.Color;
 import java.io.IOException;
 
 import org.apache.pdfbox.cos.COSArray;

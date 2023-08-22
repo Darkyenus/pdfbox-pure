@@ -46,13 +46,8 @@
     <module>parent</module>
     <module>io</module>
     <module>fontbox</module>
-    <module>xmpbox</module>
     <module>pdfbox</module>
-    <module>debugger</module>
-    <module>tools</module>
-    <module>app</module>
-    <module>debugger-app</module>
-    <module>examples</module>
+    <module>platform</module>
   </modules>
 
   <build>

@@ -19,10 +19,7 @@ import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSFloat;
 import org.apache.pdfbox.cos.COSName;
-import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.interactive.annotation.handlers.PDAppearanceHandler;
-import org.apache.pdfbox.pdmodel.interactive.annotation.handlers.PDFreeTextAppearanceHandler;
 import org.apache.pdfbox.pdmodel.interactive.form.PDVariableText;
 
 /**
@@ -50,8 +47,6 @@ public class PDAnnotationFreeText extends PDAnnotationMarkup
      * The annotation is intended to function as a click-to-type or typewriter object.
      */
     public static final String IT_FREE_TEXT_TYPE_WRITER = "FreeTextTypeWriter";
-
-    private PDAppearanceHandler customAppearanceHandler;
 
     public PDAnnotationFreeText()
     {
@@ -284,33 +279,4 @@ public class PDAnnotationFreeText extends PDAnnotationMarkup
         return rectDifference != null ? new PDRectangle(rectDifference) : null;
     }
 
-    /**
-     * Set a custom appearance handler for generating the annotations appearance streams.
-     * 
-     * @param appearanceHandler custom appearance handler
-     */
-    public void setCustomAppearanceHandler(PDAppearanceHandler appearanceHandler)
-    {
-        customAppearanceHandler = appearanceHandler;
-    }
-
-    @Override
-    public void constructAppearances()
-    {
-        this.constructAppearances(null);
-    }
-
-    @Override
-    public void constructAppearances(PDDocument document)
-    {
-        if (customAppearanceHandler == null)
-        {
-            PDFreeTextAppearanceHandler appearanceHandler = new PDFreeTextAppearanceHandler(this, document);
-            appearanceHandler.generateAppearanceStreams();
-        }
-        else
-        {
-            customAppearanceHandler.generateAppearanceStreams();
-        }
-    }
 }

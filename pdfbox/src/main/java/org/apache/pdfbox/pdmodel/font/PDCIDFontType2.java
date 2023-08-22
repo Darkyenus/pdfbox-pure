@@ -16,8 +16,8 @@
  */
 package org.apache.pdfbox.pdmodel.font;
 
-import java.awt.geom.AffineTransform;
-import java.awt.geom.GeneralPath;
+import org.apache.awt.geom.AffineTransform;
+import org.apache.awt.geom.GeneralPath;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;

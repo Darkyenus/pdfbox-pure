@@ -16,10 +16,6 @@
  */
 package org.apache.fontbox.cff;
 
-import java.awt.geom.AffineTransform;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +26,10 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.fontbox.cff.CharStringCommand.Type1KeyWord;
 import org.apache.fontbox.encoding.StandardEncoding;
 import org.apache.fontbox.type1.Type1CharStringReader;
+import org.apache.awt.geom.AffineTransform;
+import org.apache.awt.geom.GeneralPath;
+import org.apache.awt.geom.Point2D;
+import org.apache.awt.geom.Rectangle2D;
 
 /**
  * This class represents and renders a Type 1 CharString.
@@ -46,10 +46,10 @@ public class Type1CharString
     private final String glyphName;
     private GeneralPath path = null;
     private int width = 0;
-    private Point2D.Float leftSideBearing = null;
-    private Point2D.Float current = null;
+    private Point2D leftSideBearing = null;
+    private Point2D current = null;
     private boolean isFlex = false;
-    private final List<Point2D.Float> flexPoints = new ArrayList<>();
+    private final List<Point2D> flexPoints = new ArrayList<>();
     private final List<Object> type1Sequence = new ArrayList<>();
     private int commandCount = 0;
 
@@ -80,7 +80,7 @@ public class Type1CharString
         this.font = font;
         this.fontName = fontName;
         this.glyphName = glyphName;
-        this.current = new Point2D.Float(0, 0);
+        this.current = new Point2D(0, 0);
     }
 
     // todo: NEW name (or CID as hex)
@@ -143,7 +143,7 @@ public class Type1CharString
     private void render() 
     {
         path = new GeneralPath();
-        leftSideBearing = new Point2D.Float(0, 0);
+        leftSideBearing = new Point2D(0, 0);
         width = 0;
         List<Number> numbers = new ArrayList<>();
         type1Sequence.forEach(obj -> {
@@ -177,7 +177,7 @@ public class Type1CharString
             {
                 if (isFlex)
                 {
-                    flexPoints.add(new Point2D.Float(numbers.get(0).floatValue(), numbers.get(1).floatValue()));
+                    flexPoints.add(new Point2D(numbers.get(0).floatValue(), numbers.get(1).floatValue()));
                 }
                 else
                 {
@@ -191,7 +191,7 @@ public class Type1CharString
                 if (isFlex)
                 {
                     // not in the Type 1 spec, but exists in some fonts
-                    flexPoints.add(new Point2D.Float(0f, numbers.get(0).floatValue()));
+                    flexPoints.add(new Point2D(0f, numbers.get(0).floatValue()));
                 }
                 else
                 {
@@ -205,7 +205,7 @@ public class Type1CharString
                 if (isFlex)
                 {
                     // not in the Type 1 spec, but exists in some fonts
-                    flexPoints.add(new Point2D.Float(numbers.get(0).floatValue(), 0f));
+                    flexPoints.add(new Point2D(numbers.get(0).floatValue(), 0f));
                 }
                 else
                 {
@@ -244,7 +244,7 @@ public class Type1CharString
         case SBW:
             if (numbers.size() >= 3)
             {
-                leftSideBearing = new Point2D.Float(numbers.get(0).floatValue(), numbers.get(1).floatValue());
+                leftSideBearing = new Point2D(numbers.get(0).floatValue(), numbers.get(1).floatValue());
                 width = numbers.get(2).intValue();
                 current.setLocation(leftSideBearing);
             }
@@ -252,7 +252,7 @@ public class Type1CharString
         case HSBW:
             if (numbers.size() >= 2)
             {
-                leftSideBearing = new Point2D.Float(numbers.get(0).floatValue(), 0);
+                leftSideBearing = new Point2D(numbers.get(0).floatValue(), 0);
                 width = numbers.get(1).intValue();
                 current.setLocation(leftSideBearing);
             }
@@ -355,25 +355,25 @@ public class Type1CharString
             }
 
             // reference point is relative to start point
-            Point2D.Float reference = flexPoints.get(0);
+            Point2D reference = flexPoints.get(0);
             reference.setLocation(current.getX() + reference.getX(),
                                   current.getY() + reference.getY());
 
             // first point is relative to reference point
-            Point2D.Float first = flexPoints.get(1);
+            Point2D first = flexPoints.get(1);
             first.setLocation(reference.getX() + first.getX(), reference.getY() + first.getY());
 
             // make the first point relative to the start point
             first.setLocation(first.getX() - current.getX(), first.getY() - current.getY());
 
-            Point2D.Float p1 = flexPoints.get(1);
-            Point2D.Float p2 = flexPoints.get(2);
-            Point2D.Float p3 = flexPoints.get(3);
+            Point2D p1 = flexPoints.get(1);
+            Point2D p2 = flexPoints.get(2);
+            Point2D p3 = flexPoints.get(3);
             rrcurveTo(p1.getX(), p1.getY(), p2.getX(), p2.getY(), p3.getX(), p3.getY());
 
-            Point2D.Float p4 = flexPoints.get(4);
-            Point2D.Float p5 = flexPoints.get(5);
-            Point2D.Float p6 = flexPoints.get(6);
+            Point2D p4 = flexPoints.get(4);
+            Point2D p5 = flexPoints.get(5);
+            Point2D p6 = flexPoints.get(6);
             rrcurveTo(p4.getX(), p4.getY(), p5.getX(), p5.getY(), p6.getX(), p6.getY());
 
             flexPoints.clear();

@@ -36,7 +36,6 @@ import org.apache.pdfbox.pdmodel.graphics.color.PDColorSpace;
 import org.apache.pdfbox.pdmodel.graphics.color.PDDeviceCMYK;
 import org.apache.pdfbox.pdmodel.graphics.color.PDDeviceGray;
 import org.apache.pdfbox.pdmodel.graphics.color.PDDeviceRGB;
-import org.apache.pdfbox.pdmodel.PDAppearanceContentStream;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAppearanceStream;
 
 /**
@@ -261,14 +260,6 @@ class PDDefaultAppearanceString
     {
         this.fontSize = fontSize;
     }
-    
-    /**
-     * Returns the font color
-     */
-    PDColor getFontColor()
-    {
-        return fontColor;
-    }
 
     /**
      * Set the font color.
@@ -280,47 +271,4 @@ class PDDefaultAppearanceString
         this.fontColor = fontColor;
     }
 
-    /**
-     * Write font name, font size and color from the /DA string to the given content stream.
-     *
-     * @param contents The content stream.
-     * @param zeroFontSize The calculated font size to use if the /DA string has a size 0
-     * (autosize). Otherwise the size from the /DA string is used.
-     */
-    void writeTo(PDAppearanceContentStream contents, float zeroFontSize) throws IOException
-    {
-        float fontSize = getFontSize();
-        if (Float.compare(fontSize, 0) == 0)
-        {
-            fontSize = zeroFontSize;
-        }
-        contents.setFont(getFont(), fontSize);
-        
-        if (getFontColor() != null)
-        {
-            contents.setNonStrokingColor(getFontColor());
-        }
-    }
-
-    /**
-     * Copies any needed resources from the document’s DR dictionary into the stream’s Resources
-     * dictionary. Resources with the same name shall be left intact.
-     */
-    void copyNeededResourcesTo(PDAppearanceStream appearanceStream) throws IOException
-    {
-        // make sure we have resources
-        PDResources streamResources = appearanceStream.getResources();
-        if (streamResources == null)
-        {
-            streamResources = new PDResources();
-            appearanceStream.setResources(streamResources);
-        }
-        
-        if (streamResources.getFont(fontName) == null)
-        {
-            streamResources.put(fontName, getFont());
-        }
-
-        // todo: other kinds of resource...
-    }
 }

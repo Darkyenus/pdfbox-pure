@@ -16,7 +16,7 @@
  */
 package org.apache.pdfbox.pdmodel.font;
 
-import java.awt.geom.GeneralPath;
+import org.apache.awt.geom.GeneralPath;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;

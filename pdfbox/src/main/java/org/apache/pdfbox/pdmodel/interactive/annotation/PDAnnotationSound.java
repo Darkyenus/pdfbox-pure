@@ -17,9 +17,6 @@ package org.apache.pdfbox.pdmodel.interactive.annotation;
 
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.interactive.annotation.handlers.PDAppearanceHandler;
-import org.apache.pdfbox.pdmodel.interactive.annotation.handlers.PDSoundAppearanceHandler;
 
 /**
  *
@@ -31,8 +28,6 @@ public class PDAnnotationSound extends PDAnnotationMarkup
      * The type of annotation.
      */
     public static final String SUB_TYPE = "Sound";
-
-    private PDAppearanceHandler customAppearanceHandler;
 
     public PDAnnotationSound()
     {
@@ -48,34 +43,5 @@ public class PDAnnotationSound extends PDAnnotationMarkup
     {
         super(field);
     }
-    
-    /**
-     * Set a custom appearance handler for generating the annotations appearance streams.
-     * 
-     * @param appearanceHandler custom appearance handler
-     */
-    public void setCustomAppearanceHandler(PDAppearanceHandler appearanceHandler)
-    {
-        customAppearanceHandler = appearanceHandler;
-    }
 
-    @Override
-    public void constructAppearances()
-    {
-        this.constructAppearances(null);
-    }
-
-    @Override
-    public void constructAppearances(PDDocument document)
-    {
-        if (customAppearanceHandler == null)
-        {
-            PDSoundAppearanceHandler appearanceHandler = new PDSoundAppearanceHandler(this, document);
-            appearanceHandler.generateAppearanceStreams();
-        }
-        else
-        {
-            customAppearanceHandler.generateAppearanceStreams();
-        }
-    }
 }

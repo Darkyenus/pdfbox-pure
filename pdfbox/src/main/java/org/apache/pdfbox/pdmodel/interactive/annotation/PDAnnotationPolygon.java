@@ -19,10 +19,7 @@ import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
-import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.graphics.color.PDColor;
-import org.apache.pdfbox.pdmodel.interactive.annotation.handlers.PDAppearanceHandler;
-import org.apache.pdfbox.pdmodel.interactive.annotation.handlers.PDPolygonAppearanceHandler;
 
 /**
  *
@@ -35,8 +32,6 @@ public class PDAnnotationPolygon extends PDAnnotationMarkup
      */
     public static final String SUB_TYPE = "Polygon";
 
-    private PDAppearanceHandler customAppearanceHandler;
-    
     /**
      * Constructor.
      */
@@ -66,16 +61,6 @@ public class PDAnnotationPolygon extends PDAnnotationMarkup
     public void setInteriorColor(PDColor ic)
     {
         getCOSObject().setItem(COSName.IC, ic.toCOSArray());
-    }
-
-    /**
-     * This will retrieve the interior color.
-     *
-     * @return object representing the color.
-     */
-    public PDColor getInteriorColor()
-    {
-        return getColor(COSName.IC);
     }
 
     /**
@@ -156,35 +141,5 @@ public class PDAnnotationPolygon extends PDAnnotationMarkup
             return pathArray;
         }
         return null;
-    }
-
-    /**
-     * Set a custom appearance handler for generating the annotations appearance streams.
-     * 
-     * @param appearanceHandler custom appearance handler
-     */
-    public void setCustomAppearanceHandler(PDAppearanceHandler appearanceHandler)
-    {
-        customAppearanceHandler = appearanceHandler;
-    }
-
-    @Override
-    public void constructAppearances()
-    {
-        this.constructAppearances(null);
-    }
-
-    @Override
-    public void constructAppearances(PDDocument document)
-    {
-        if (customAppearanceHandler == null)
-        {
-            PDPolygonAppearanceHandler appearanceHandler = new PDPolygonAppearanceHandler(this, document);
-            appearanceHandler.generateAppearanceStreams();
-        }
-        else
-        {
-            customAppearanceHandler.generateAppearanceStreams();
-        }
     }
 }

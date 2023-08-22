@@ -16,12 +16,6 @@
  */
 package org.apache.pdfbox.pdmodel;
 
-import java.io.IOException;
-import java.lang.ref.SoftReference;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
@@ -31,15 +25,18 @@ import org.apache.pdfbox.pdmodel.common.COSObjectable;
 import org.apache.pdfbox.pdmodel.documentinterchange.markedcontent.PDPropertyList;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDFontFactory;
-import org.apache.pdfbox.pdmodel.graphics.color.PDPattern;
+import org.apache.pdfbox.pdmodel.graphics.PDXObject;
+import org.apache.pdfbox.pdmodel.graphics.color.PDColorSpace;
 import org.apache.pdfbox.pdmodel.graphics.form.PDFormXObject;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.pdmodel.graphics.optionalcontent.PDOptionalContentGroup;
 import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
-import org.apache.pdfbox.pdmodel.graphics.color.PDColorSpace;
-import org.apache.pdfbox.pdmodel.graphics.pattern.PDAbstractPattern;
-import org.apache.pdfbox.pdmodel.graphics.shading.PDShading;
-import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import org.apache.pdfbox.pdmodel.graphics.PDXObject;
+
+import java.io.IOException;
+import java.lang.ref.SoftReference;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A set of resources available at the page/pages/stream level.
@@ -228,13 +225,13 @@ public final class PDResources implements COSObjectable
         }
 
         // we can't cache PDPattern, because it holds page resources, see PDFBOX-2370
-        if (cache != null && indirect != null && !(colorSpace instanceof PDPattern))
+        if (cache != null && indirect != null)
         {
             cache.put(indirect, colorSpace);
         }
         return colorSpace;
     }
-    
+
     /**
      * Returns true if the given color space name exists in these resources.
      *
@@ -277,76 +274,6 @@ public final class PDResources implements COSObjectable
             cache.put(indirect, extGState);
         }
         return extGState;
-    }
-
-    /**
-     * Returns the shading resource with the given name, or null if none exists.
-     *
-     * @param name Name of the shading resource.
-     * @return the shading state with the given name or null
-     * 
-     * @throws IOException if something went wrong.
-     */
-    public PDShading getShading(COSName name) throws IOException
-    {
-        COSObject indirect = getIndirect(COSName.SHADING, name);
-        if (cache != null && indirect != null)
-        {
-            PDShading cached = cache.getShading(indirect);
-            if (cached != null)
-            {
-                return cached;
-            }
-        }
-
-        // get the instance
-        PDShading shading = null;
-        COSBase base = get(COSName.SHADING, name);
-        if (base instanceof COSDictionary)
-        {
-            shading = PDShading.create((COSDictionary) base);
-        }
-        
-        if (cache != null && indirect != null)
-        {
-            cache.put(indirect, shading);
-        }
-        return shading;
-    }
-
-    /**
-     * Returns the pattern resource with the given name, or null if none exists.
-     * 
-     * @param name Name of the pattern resource.
-     * @return the pattern with the given name or null
-     * 
-     * @throws IOException if something went wrong.
-     */
-    public PDAbstractPattern getPattern(COSName name) throws IOException
-    {
-        COSObject indirect = getIndirect(COSName.PATTERN, name);
-        if (cache != null && indirect != null)
-        {
-            PDAbstractPattern cached = cache.getPattern(indirect);
-            if (cached != null)
-            {
-                return cached;
-            }
-        }
-
-        // get the instance
-        PDAbstractPattern pattern = null;
-        COSBase base = get(COSName.PATTERN, name);
-        if (base instanceof COSDictionary)
-        {
-            pattern = PDAbstractPattern.create((COSDictionary) base, getResourceCache());
-        }
-
-        if (cache != null && indirect != null)
-        {
-            cache.put(indirect, pattern);
-        }
-        return pattern;
     }
 
     /**
@@ -443,40 +370,7 @@ public final class PDResources implements COSObjectable
         {
             xobject = PDXObject.createXObject(value, this);
         }
-        if (cache != null && indirect != null && isAllowedCache(xobject))
-        {
-            cache.put(indirect, xobject);
-        }
         return xobject;
-    }
-
-    private boolean isAllowedCache(PDXObject xobject)
-    {
-        if (xobject instanceof PDImageXObject)
-        {
-            COSName colorSpaceName = xobject.getCOSObject().getCOSName(COSName.COLORSPACE);
-            if (colorSpaceName != null)
-            {
-                // don't cache if it might use page resources, see PDFBOX-2370 and PDFBOX-3484
-                if (colorSpaceName.equals(COSName.DEVICECMYK) && hasColorSpace(COSName.DEFAULT_CMYK))
-                {
-                    return false;
-                }
-                if (colorSpaceName.equals(COSName.DEVICERGB) && hasColorSpace(COSName.DEFAULT_RGB))
-                {
-                    return false;
-                }
-                if (colorSpaceName.equals(COSName.DEVICEGRAY) && hasColorSpace(COSName.DEFAULT_GRAY))
-                {
-                    return false;
-                }
-                if (hasColorSpace(colorSpaceName))
-                {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
     /**
@@ -505,16 +399,6 @@ public final class PDResources implements COSObjectable
     {
         COSDictionary dict = resources.getCOSDictionary(kind);
         return dict != null ? dict.getDictionaryObject(name) : null;
-    }
-
-    /**
-     * Returns the names of the color space resources, if any.
-     * 
-     * @return an iterable containing all names of available colorspaces
-     */
-    public Iterable<COSName> getColorSpaceNames()
-    {
-        return getNames(COSName.COLORSPACE);
     }
 
     /**
@@ -555,26 +439,6 @@ public final class PDResources implements COSObjectable
     public Iterable<COSName> getShadingNames()
     {
         return getNames(COSName.SHADING);
-    }
-
-    /**
-     * Returns the names of the pattern resources, if any.
-     * 
-     * @return an iterable containing all names of available patterns
-     */
-    public Iterable<COSName> getPatternNames()
-    {
-        return getNames(COSName.PATTERN);
-    }
-
-    /**
-     * Returns the names of the extended graphics state resources, if any.
-     * 
-     * @return an iterable containing all names of available extended graphics states
-     */
-    public Iterable<COSName> getExtGStateNames()
-    {
-        return getNames(COSName.EXT_G_STATE);
     }
 
     /**
@@ -620,30 +484,6 @@ public final class PDResources implements COSObjectable
     public COSName add(PDExtendedGraphicsState extGState)
     {
         return add(COSName.EXT_G_STATE, "gs", extGState);
-    }
-
-    /**
-     * Adds the given shading to the resources of the current page and returns the name for the
-     * new resources. Returns the existing resource name if the given item already exists.
-     *
-     * @param shading the shading to add
-     * @return the name of the resource in the resources dictionary
-     */
-    public COSName add(PDShading shading)
-    {
-        return add(COSName.SHADING, "sh", shading);
-    }
-
-    /**
-     * Adds the given pattern to the resources of the current page and returns the name for the
-     * new resources. Returns the existing resource name if the given item already exists.
-     *
-     * @param pattern the pattern to add
-     * @return the name of the resource in the resources dictionary
-     */
-    public COSName add(PDAbstractPattern pattern)
-    {
-        return add(COSName.PATTERN, "p", pattern);
     }
 
     /**
@@ -802,28 +642,6 @@ public final class PDResources implements COSObjectable
     public void put(COSName name, PDExtendedGraphicsState extGState)
     {
         put(COSName.EXT_G_STATE, name, extGState);
-    }
-
-    /**
-     * Sets the shading resource with the given name.
-     *
-     * @param name the name of the resource
-     * @param shading the shading to be added
-     */
-    public void put(COSName name, PDShading shading)
-    {
-        put(COSName.SHADING, name, shading);
-    }
-
-    /**
-     * Sets the pattern resource with the given name.
-     *
-     * @param name the name of the resource
-     * @param pattern the pattern to be added
-     */
-    public void put(COSName name, PDAbstractPattern pattern)
-    {
-        put(COSName.PATTERN, name, pattern);
     }
 
     /**

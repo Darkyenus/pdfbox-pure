@@ -105,63 +105,6 @@ public abstract class PDVariableText extends PDTerminalField
     }
 
     /**
-     * Set the default appearance.
-     * 
-     * This will set the local default appearance for the variable text field only, not 
-     * affecting a default appearance in the parent hierarchy.
-     * 
-     * Providing null as the value will remove the local default appearance.
-     * <p>
-     * This method can also be used to change the font of a field, by replacing the font name from
-     * this string with another font name found in the AcroForm default resources <u>before</u>
-     * calling {@link #setValue(java.lang.String) setValue(String)}, see also
-     * <a href="https://stackoverflow.com/questions/47995062/pdfbox-api-how-to-handle-cyrillic-values">this
-     * stackoverflow answer</a>. For example, "/Helv 10 Tf 0 g" can be replaced with "/F1 10 Tf 0
-     * g". Performance may go down (see
-     * <a href="https://issues.apache.org/jira/browse/PDFBOX-4508">PDFBOX-4508)</a> if this is done
-     * for many fields and with a very large font (e.g. ArialUni); to avoid this, save and reload
-     * the file after changing all fields.
-     *
-     * @param daValue a string describing the default appearance
-     */
-    public void setDefaultAppearance(String daValue)
-    {
-        getCOSObject().setString(COSName.DA, daValue);
-    }
-
-    /**
-     * Get the default style string.
-     * 
-     * The default style string defines the default style for
-     * rich text fields.
-     * 
-     * @return the DS element of the dictionary object
-     */
-    public String getDefaultStyleString()
-    {
-        return getCOSObject().getString(COSName.DS);
-    }
-
-    /**
-     * Set the default style string.
-     * 
-     * Providing null as the value will remove the default style string.
-     * 
-     * @param defaultStyleString a string describing the default style.
-     */
-    public void setDefaultStyleString(String defaultStyleString)
-    {
-        if (defaultStyleString != null)
-        {
-            getCOSObject().setItem(COSName.DS, new COSString(defaultStyleString));
-        }
-        else
-        {
-            getCOSObject().removeItem(COSName.DS);
-        }
-    }    
-
-    /**
      * This will get the 'quadding' or justification of the text to be displayed.
      * 
      * This is an inheritable attribute.

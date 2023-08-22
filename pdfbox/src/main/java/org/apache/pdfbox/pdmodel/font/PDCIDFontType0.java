@@ -16,9 +16,9 @@
  */
 package org.apache.pdfbox.pdmodel.font;
 
-import java.awt.geom.AffineTransform;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Point2D;
+import org.apache.awt.geom.AffineTransform;
+import org.apache.awt.geom.GeneralPath;
+import org.apache.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -424,7 +424,7 @@ public class PDCIDFontType0 extends PDCIDFont
             width = t1Font.getWidth(getGlyphName(code));
         }
         
-        Point2D p = new Point2D.Float(width, 0);
+        Point2D p = new Point2D(width, 0);
         fontMatrixTransform.transform(p, p);
         return (float)p.getX();
     }
