@@ -17,8 +17,8 @@
 package org.apache.fontbox.ttf;
 
 import java.io.IOException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.Log;
+import org.apache.logging.LogFactory;
 
 /**
  * A table in a true type font.

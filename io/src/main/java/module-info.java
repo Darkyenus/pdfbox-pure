@@ -1,5 +1,4 @@
 module pdfbox.io {
-    requires commons.logging;
-
+    requires pdfbox.platform;
     exports org.apache.pdfbox.io;
 }

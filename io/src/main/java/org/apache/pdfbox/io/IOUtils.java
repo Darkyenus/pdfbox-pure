@@ -44,8 +44,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.Log;
+import org.apache.logging.LogFactory;
 import org.apache.pdfbox.io.RandomAccessStreamCache.StreamCacheCreateFunction;
 
 /**

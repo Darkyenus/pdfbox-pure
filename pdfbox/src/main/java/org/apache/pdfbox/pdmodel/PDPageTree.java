@@ -32,8 +32,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.Log;
+import org.apache.logging.LogFactory;
 
 /**
  * The page tree, which defines the ordering of pages in the document in an efficient manner.

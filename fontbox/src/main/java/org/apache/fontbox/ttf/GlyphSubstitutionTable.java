@@ -28,8 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.Log;
+import org.apache.logging.LogFactory;
 import org.apache.fontbox.ttf.gsub.GlyphSubstitutionDataExtractor;
 import org.apache.fontbox.ttf.model.GsubData;
 import org.apache.fontbox.ttf.table.common.CoverageTable;

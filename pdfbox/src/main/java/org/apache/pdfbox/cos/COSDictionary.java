@@ -29,8 +29,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.Log;
+import org.apache.logging.LogFactory;
 
 import org.apache.pdfbox.io.IOUtils;
 import org.apache.pdfbox.pdmodel.common.COSObjectable;

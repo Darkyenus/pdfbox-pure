@@ -1,5 +1,4 @@
 module fontbox {
-    requires commons.logging;
     requires pdfbox.io;
     requires pdfbox.platform;
 

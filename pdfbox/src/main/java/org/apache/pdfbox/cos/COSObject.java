@@ -18,8 +18,8 @@ package org.apache.pdfbox.cos;
 
 import java.io.IOException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.Log;
+import org.apache.logging.LogFactory;
 
 /**
  * This class represents a PDF object.

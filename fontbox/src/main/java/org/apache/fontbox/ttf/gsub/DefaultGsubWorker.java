@@ -19,8 +19,8 @@ package org.apache.fontbox.ttf.gsub;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.Log;
+import org.apache.logging.LogFactory;
 import org.apache.fontbox.ttf.GlyphSubstitutionTable;
 
 /**

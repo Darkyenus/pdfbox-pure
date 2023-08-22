@@ -19,8 +19,8 @@
 package org.apache.fontbox.ttf;
 
 import java.io.IOException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.Log;
+import org.apache.logging.LogFactory;
 
 /**
  * This class is based on code from Apache Batik a subproject of Apache XMLGraphics. see

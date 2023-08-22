@@ -19,8 +19,8 @@ package org.apache.fontbox.ttf;
 import java.io.EOFException;
 import java.io.IOException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.Log;
+import org.apache.logging.LogFactory;
 
 /**
  * The OS/2 and Windows Metrics Table in a TrueType font, see

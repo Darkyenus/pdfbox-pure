@@ -22,8 +22,8 @@ package org.apache.fontbox.type1;
 import java.io.IOException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.Log;
+import org.apache.logging.LogFactory;
 
 /**
  * Lexer for the ASCII portions of an Adobe Type 1 font.

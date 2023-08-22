@@ -20,8 +20,8 @@ package org.apache.fontbox.util.autodetect;
 import java.io.File;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.Log;
+import org.apache.logging.LogFactory;
 
 /**
  * Native font finder base class. This class is based on a class provided by Apache FOP. see

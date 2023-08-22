@@ -19,8 +19,8 @@ package org.apache.pdfbox.io;
 import java.io.InputStream;
 import java.io.IOException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.Log;
+import org.apache.logging.LogFactory;
 
 /**
  * An InputStream which reads from a RandomAccessRead.

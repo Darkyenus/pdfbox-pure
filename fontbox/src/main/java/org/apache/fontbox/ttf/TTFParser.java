@@ -18,8 +18,8 @@ package org.apache.fontbox.ttf;
 
 import java.io.IOException;
 import java.io.InputStream;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.Log;
+import org.apache.logging.LogFactory;
 import org.apache.pdfbox.io.RandomAccessRead;
 
 /**

@@ -26,8 +26,8 @@ import java.util.List;
 import org.apache.awt.imageio.stream.MemoryCacheImageInputStream;
 import org.apache.awt.imageio.stream.MemoryCacheImageOutputStream;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.Log;
+import org.apache.logging.LogFactory;
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
 
